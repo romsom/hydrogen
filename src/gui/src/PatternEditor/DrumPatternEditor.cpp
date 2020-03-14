@@ -57,7 +57,7 @@ DrumPatternEditor::DrumPatternEditor(QWidget* parent, PatternEditorPanel *panel)
  : QWidget( parent )
  , Object( __class_name )
  , m_nResolution( 8 )
- , m_bUseTriplets( false )
+ , m_nDivisionBase( 4 )
  , m_bRightBtnPressed( false )
  , m_pDraggedNote( nullptr )
  , m_pPattern( nullptr )
@@ -126,12 +126,7 @@ void DrumPatternEditor::updateEditor()
 int DrumPatternEditor::getColumn(QMouseEvent *ev)
 {
 	int nBase;
-	if (m_bUseTriplets) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = m_nDivisionBase;
 	float nWidth = (m_nGridWidth * 4 * MAX_NOTES) / (nBase * m_nResolution);
 
 	int x = ev->x();
@@ -643,12 +638,7 @@ void DrumPatternEditor::__draw_grid( QPainter& p )
 	p.setPen( QPen( res_1, 0, Qt::DotLine ) );
 
 	int nBase;
-	if (m_bUseTriplets) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = m_nDivisionBase;
 
 	int n4th = 4 * MAX_NOTES / (nBase * 4);
 	int n8th = 4 * MAX_NOTES / (nBase * 8);
@@ -660,6 +650,7 @@ void DrumPatternEditor::__draw_grid( QPainter& p )
 	if ( m_pPattern ) {
 		nNotes = m_pPattern->get_length();
 	}
+	// TODO: Tuplet generalization
 	if (!m_bUseTriplets) {
 		for ( int i = 0; i < nNotes + 1; i++ ) {
 			uint x = 20 + i * m_nGridWidth;
@@ -806,10 +797,10 @@ void DrumPatternEditor::hideEvent ( QHideEvent *ev )
 
 
 
-void DrumPatternEditor::setResolution(uint res, bool bUseTriplets)
+void DrumPatternEditor::setResolution(uint res, int nDivisionBase)
 {
 	this->m_nResolution = res;
-	this->m_bUseTriplets = bUseTriplets;
+	this->m_nDivisionBase = nDivisionBase;
 
 	// redraw all
 	update( 0, 0, width(), height() );
@@ -1189,12 +1180,7 @@ void DrumPatternEditor::functionRandomVelocityAction( QStringList noteVeloValue,
 	AudioEngine::get_instance()->lock( RIGHT_HERE );	// lock the audio engine
 
 	int nBase;
-	if ( isUsingTriplets() ) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = m_nDivisionBase;
 
 	int nResolution = 4 * MAX_NOTES / ( nBase * getResolution() );
 	int positionCount = 0;

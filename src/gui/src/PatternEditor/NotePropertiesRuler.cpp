@@ -111,12 +111,7 @@ void NotePropertiesRuler::wheelEvent(QWheelEvent *ev )
 
 	DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 	int nBase;
-	if (pPatternEditor->isUsingTriplets()) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = pPatternEditor->getDivisionBase();
 	int width = (m_nGridWidth * 4 *  MAX_NOTES) / ( nBase * pPatternEditor->getResolution());
 	int x_pos = ev->x();
 	int column;
@@ -235,12 +230,7 @@ void NotePropertiesRuler::pressAction( int x, int y)
 
 	DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 	int nBase;
-	if (pPatternEditor->isUsingTriplets()) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = pPatternEditor->getDivisionBase();
 	int width = (m_nGridWidth * 4 *  MAX_NOTES) / ( nBase * pPatternEditor->getResolution());
 	int x_pos = x;
 	int column;
@@ -317,12 +307,7 @@ void NotePropertiesRuler::pressAction( int x, int y)
 	
 		DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 		int nBase;
-		if (pPatternEditor->isUsingTriplets()) {
-			nBase = 3;
-		}
-		else {
-			nBase = 4;
-		}
+		nBase = pPatternEditor->getDivisionBase();
 		int width = (m_nGridWidth * 4 *  MAX_NOTES) / ( nBase * pPatternEditor->getResolution());
 		int x_pos = ev->x();
 		int column;
@@ -546,12 +531,7 @@ void NotePropertiesRuler::createVelocityBackground(QPixmap *pixmap)
 
 	DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 	int nBase;
-	if (pPatternEditor->isUsingTriplets()) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = pPatternEditor->getDivisionBase();
 
 	int n4th = 4 * MAX_NOTES / (nBase * 4);
 	int n8th = 4 * MAX_NOTES / (nBase * 8);
@@ -561,6 +541,7 @@ void NotePropertiesRuler::createVelocityBackground(QPixmap *pixmap)
 	int nResolution = pPatternEditor->getResolution();
 
 
+	// TODO: Tuplet generalization
 	if ( !pPatternEditor->isUsingTriplets() ) {
 
 		for (uint i = 0; i < nNotes + 1; i++) {
@@ -716,12 +697,7 @@ void NotePropertiesRuler::createPanBackground(QPixmap *pixmap)
 	// vertical lines
 	DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 	int nBase;
-	if (pPatternEditor->isUsingTriplets()) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = pPatternEditor->getDivisionBase();
 
 	int n4th = 4 * MAX_NOTES / (nBase * 4);
 	int n8th = 4 * MAX_NOTES / (nBase * 8);
@@ -731,6 +707,7 @@ void NotePropertiesRuler::createPanBackground(QPixmap *pixmap)
 
 	int nResolution = pPatternEditor->getResolution();
 
+	// TODO: Tuplet generalization
 	if ( !pPatternEditor->isUsingTriplets() ) {
 
 		for (uint i = 0; i < nNotes +1 ; i++) {
@@ -876,12 +853,7 @@ void NotePropertiesRuler::createLeadLagBackground(QPixmap *pixmap)
 	// vertical lines
 	DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 	int nBase;
-	if (pPatternEditor->isUsingTriplets()) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = pPatternEditor->getDivisionBase();
 
 	int n4th = 4 * MAX_NOTES / (nBase * 4);
 	int n8th = 4 * MAX_NOTES / (nBase * 8);
@@ -891,6 +863,7 @@ void NotePropertiesRuler::createLeadLagBackground(QPixmap *pixmap)
 
 	int nResolution = pPatternEditor->getResolution();
 
+	// TODO: Tuplet generalization
 	if ( !pPatternEditor->isUsingTriplets() ) {
 
 		for (uint i = 0; i < nNotes + 1; i++) {
@@ -1066,12 +1039,7 @@ void NotePropertiesRuler::createNoteKeyBackground(QPixmap *pixmap)
 	// vertical lines
 	DrumPatternEditor *pPatternEditor = m_pPatternEditorPanel->getDrumPatternEditor();
 	int nBase;
-	if (pPatternEditor->isUsingTriplets()) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = pPatternEditor->getDivisionBase();
 
 	int n4th = 4 * MAX_NOTES / (nBase * 4);
 	int n8th = 4 * MAX_NOTES / (nBase * 8);
@@ -1081,6 +1049,7 @@ void NotePropertiesRuler::createNoteKeyBackground(QPixmap *pixmap)
 	int nResolution = pPatternEditor->getResolution();
 
 
+	// TODO: Tuplet generalization
 	if ( !pPatternEditor->isUsingTriplets() ) {
 
 		for (uint i = 0; i < nNotes + 1; i++) {

@@ -2554,7 +2554,7 @@ void Hydrogen::addRealtimeNote(	int		instrument,
 	Preferences *pPreferences = Preferences::get_instance();
 	unsigned int nRealColumn = 0;
 	unsigned res = pPreferences->getPatternEditorGridResolution();
-	int nBase = pPreferences->isPatternEditorUsingTriplets() ? 3 : 4;
+	int nBase = pPreferences->getPatternEditorDivisionBase();
 	int scalar = ( 4 * MAX_NOTES ) / ( res * nBase );
 	bool hearnote = forcePlay;
 	int currentPatternNumber;

@@ -46,7 +46,7 @@ PianoRollEditor::PianoRollEditor( QWidget *pParent, PatternEditorPanel *panel )
 	, Object( __class_name )
 	, m_nResolution( 8 )
 	, m_bRightBtnPressed( false )
-	, m_bUseTriplets( false )
+	, m_nDivisionBase( 4 )
 	, m_pPattern( nullptr )
 	, m_pPatternEditorPanel( panel )
 	, m_pDraggedNote( nullptr )
@@ -81,10 +81,10 @@ PianoRollEditor::~PianoRollEditor()
 }
 
 
-void PianoRollEditor::setResolution(uint res, bool bUseTriplets)
+void PianoRollEditor::setResolution(uint res, bool nDivisionBase)
 {
 	this->m_nResolution = res;
-	this->m_bUseTriplets = bUseTriplets;
+	this->m_nDivisionBase = nDivisionBase;
 	updateEditor();
 }
 
@@ -296,12 +296,7 @@ void PianoRollEditor::draw_grid( QPainter& p )
 	// vertical lines
 
 	int nBase;
-	if (m_bUseTriplets) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = m_nDivisionBase;
 
 	int n4th = 4 * MAX_NOTES / (nBase * 4);
 	int n8th = 4 * MAX_NOTES / (nBase * 8);
@@ -313,6 +308,7 @@ void PianoRollEditor::draw_grid( QPainter& p )
 	if ( m_pPattern ) {
 		nNotes = m_pPattern->get_length();
 	}
+	// TODO: Tuplet generalization
 	if (!m_bUseTriplets) {
 		for ( int i = 0; i < nNotes + 1; i++ ) {
 			uint x = 20 + i * m_nGridWidth;
@@ -454,12 +450,7 @@ void PianoRollEditor::drawNote( Note *pNote, QPainter *pPainter )
 int PianoRollEditor::getColumn(QMouseEvent *ev)
 {
 	int nBase;
-	if (m_bUseTriplets) {
-		nBase = 3;
-	}
-	else {
-		nBase = 4;
-	}
+	nBase = m_nDivisionBase;
 	int nWidth = (m_nGridWidth * 4 * MAX_NOTES) / (nBase * m_nResolution);
 
 	int x = ev->x();

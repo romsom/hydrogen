@@ -53,9 +53,9 @@ class DrumPatternEditor : public QWidget, public EventListener, public H2Core::O
 		DrumPatternEditor(QWidget* parent, PatternEditorPanel *panel);
 		~DrumPatternEditor();
 
-		void setResolution(uint res, bool bUseTriplets);
+		void setResolution(uint res, int divisionBase);
 		uint getResolution() {	return m_nResolution;	}
-		bool isUsingTriplets() { return m_bUseTriplets;	}
+		int getDivisionBase() { return m_nDivisionBase;	}
 
 		void zoom_in();
 		void zoom_out();
@@ -116,7 +116,7 @@ class DrumPatternEditor : public QWidget, public EventListener, public H2Core::O
 		uint m_nGridHeight;
 		int m_nEditorHeight;
 		uint m_nResolution;
-		bool m_bUseTriplets;
+		int m_nDivisionBase;
 
 		bool m_bRightBtnPressed;
 		H2Core::Note *m_pDraggedNote;

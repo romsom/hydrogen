@@ -53,7 +53,7 @@ class PianoRollEditor: public QWidget, public EventListener, public H2Core::Obje
 		virtual void selectedInstrumentChangedEvent();
 		virtual void patternModifiedEvent();
 		//~ Implements EventListener interface
-		void setResolution(uint res, bool bUseTriplets);
+		void setResolution(uint res, int nDivisionBase);
 
 		void zoom_in();
 		void zoom_out();
@@ -91,7 +91,7 @@ class PianoRollEditor: public QWidget, public EventListener, public H2Core::Obje
 
 		uint m_nResolution;
 		bool m_bRightBtnPressed;
-		bool m_bUseTriplets;
+		int m_nDivisionBase;
 
 		H2Core::Pattern *m_pPattern;
 
