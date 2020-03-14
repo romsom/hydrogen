@@ -194,7 +194,7 @@ Preferences::Preferences()
 	mixerFontPointSize = 11;
 	mixerFalloffSpeed = 1.1;
 	m_nPatternEditorGridResolution = 8;
-	m_bPatternEditorUsingTriplets = false;
+	m_nPatternEditorGridDivisionBase = 4;
 	m_bShowInstrumentPeaks = true;
 	m_bIsFXTabVisible = true;
 	m_bShowAutomationArea = false;
@@ -489,7 +489,7 @@ void Preferences::loadPreferences( bool bGlobal )
 
 				// pattern editor grid resolution
 				m_nPatternEditorGridResolution = LocalFileMng::readXmlInt( guiNode, "patternEditorGridResolution", m_nPatternEditorGridResolution );
-				m_bPatternEditorUsingTriplets = LocalFileMng::readXmlBool( guiNode, "patternEditorUsingTriplets", m_bPatternEditorUsingTriplets );
+				m_nPatternEditorGridDivisionBase = LocalFileMng::readXmlInt( guiNode, "patternEditorGridDivisionBase", m_nPatternEditorGridDivisionBase );
 				
 				m_bShowInstrumentPeaks = LocalFileMng::readXmlBool( guiNode, "showInstrumentPeaks", m_bShowInstrumentPeaks );
 				m_bIsFXTabVisible = LocalFileMng::readXmlBool( guiNode, "isFXTabVisible", m_bIsFXTabVisible );
@@ -893,9 +893,9 @@ void Preferences::savePreferences()
 		LocalFileMng::writeXmlString( guiNode, "mixer_font_pointsize", QString("%1").arg( mixerFontPointSize ) );
 		LocalFileMng::writeXmlString( guiNode, "mixer_falloff_speed", QString("%1").arg( mixerFalloffSpeed ) );
 		LocalFileMng::writeXmlString( guiNode, "patternEditorGridResolution", QString("%1").arg( m_nPatternEditorGridResolution ) );
+		LocalFileMng::writeXmlString( guiNode, "patternEditorGridDivisionBase", QString("%1").arg( m_nPatternEditorGridDivisionBase ) );
 		LocalFileMng::writeXmlString( guiNode, "patternEditorGridHeight", QString("%1").arg( m_nPatternEditorGridHeight ) );
 		LocalFileMng::writeXmlString( guiNode, "patternEditorGridWidth", QString("%1").arg( m_nPatternEditorGridWidth ) );
-		LocalFileMng::writeXmlBool( guiNode, "patternEditorUsingTriplets", m_bPatternEditorUsingTriplets );
 		LocalFileMng::writeXmlBool( guiNode, "showInstrumentPeaks", m_bShowInstrumentPeaks );
 		LocalFileMng::writeXmlBool( guiNode, "isFXTabVisible", m_bIsFXTabVisible );
 		LocalFileMng::writeXmlBool( guiNode, "showAutomationArea", m_bShowAutomationArea );

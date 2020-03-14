@@ -542,7 +542,7 @@ void NotePropertiesRuler::createVelocityBackground(QPixmap *pixmap)
 
 
 	// TODO: Tuplet generalization
-	if ( !pPatternEditor->isUsingTriplets() ) {
+	if ( nBase == 4 ) {
 
 		for (uint i = 0; i < nNotes + 1; i++) {
 			uint x = 20 + i * m_nGridWidth;
@@ -579,7 +579,7 @@ void NotePropertiesRuler::createVelocityBackground(QPixmap *pixmap)
 			}
 		}
 	}
-	else {	// Triplets
+	else {	// Tuplets
 		uint nCounter = 0;
 		int nSize = 4 * MAX_NOTES / (nBase * nResolution);
 
@@ -587,7 +587,7 @@ void NotePropertiesRuler::createVelocityBackground(QPixmap *pixmap)
 			uint x = 20 + i * m_nGridWidth;
 
 			if ( (i % nSize) == 0) {
-				if ((nCounter % 3) == 0) {
+				if ((nCounter % nBase) == 0) {
 					p.setPen( QPen( res_1, 0, Qt::DotLine ) );
 				}
 				else {
@@ -708,7 +708,7 @@ void NotePropertiesRuler::createPanBackground(QPixmap *pixmap)
 	int nResolution = pPatternEditor->getResolution();
 
 	// TODO: Tuplet generalization
-	if ( !pPatternEditor->isUsingTriplets() ) {
+	if ( nBase == 4 ) {
 
 		for (uint i = 0; i < nNotes +1 ; i++) {
 			uint x = 20 + i * m_nGridWidth;
@@ -745,15 +745,15 @@ void NotePropertiesRuler::createPanBackground(QPixmap *pixmap)
 			}
 		}
 	}
-	else {	// Triplets
+	else {	// Tuplets
 		uint nCounter = 0;
 		int nSize = 4 * MAX_NOTES / (nBase * nResolution);
 
-		for (uint i = 0; i < nNotes +1; i++) {
+		for (uint i = 0; i < nNotes + 1; i++) {
 			uint x = 20 + i * m_nGridWidth;
 
 			if ( (i % nSize) == 0) {
-				if ((nCounter % 3) == 0) {
+				if ((nCounter % nBase) == 0) {
 					p.setPen( QPen( res_1, 0, Qt::DotLine ) );
 				}
 				else {
@@ -864,7 +864,7 @@ void NotePropertiesRuler::createLeadLagBackground(QPixmap *pixmap)
 	int nResolution = pPatternEditor->getResolution();
 
 	// TODO: Tuplet generalization
-	if ( !pPatternEditor->isUsingTriplets() ) {
+	if ( nBase == 4 ) {
 
 		for (uint i = 0; i < nNotes + 1; i++) {
 			uint x = 20 + i * m_nGridWidth;
@@ -901,7 +901,7 @@ void NotePropertiesRuler::createLeadLagBackground(QPixmap *pixmap)
 			}
 		}
 	}
-	else {  // Triplets
+	else {	// Tuplets
 		uint nCounter = 0;
 		int nSize = 4 * MAX_NOTES / (nBase * nResolution);
 
@@ -909,7 +909,7 @@ void NotePropertiesRuler::createLeadLagBackground(QPixmap *pixmap)
 			uint x = 20 + i * m_nGridWidth;
 
 			if ( (i % nSize) == 0) {
-				if ((nCounter % 3) == 0) {
+				if ((nCounter % nBase) == 0) {
 					p.setPen( QPen( res_1, 0, Qt::DotLine ) );
 				}
 				else {
@@ -1050,7 +1050,7 @@ void NotePropertiesRuler::createNoteKeyBackground(QPixmap *pixmap)
 
 
 	// TODO: Tuplet generalization
-	if ( !pPatternEditor->isUsingTriplets() ) {
+	if ( nBase == 4 ) {
 
 		for (uint i = 0; i < nNotes + 1; i++) {
 			uint x = 20 + i * m_nGridWidth;
@@ -1087,7 +1087,7 @@ void NotePropertiesRuler::createNoteKeyBackground(QPixmap *pixmap)
 			}
 		}
 	}
-	else {	// Triplets
+	else {	// Tuplets
 		uint nCounter = 0;
 		int nSize = 4 * MAX_NOTES / (nBase * nResolution);
 
@@ -1095,7 +1095,7 @@ void NotePropertiesRuler::createNoteKeyBackground(QPixmap *pixmap)
 			uint x = 20 + i * m_nGridWidth;
 
 			if ( (i % nSize) == 0) {
-				if ((nCounter % 3) == 0) {
+				if ((nCounter % nBase) == 0) {
 					p.setPen( QPen( res_1, 0, Qt::DotLine ) );
 				}
 				else {

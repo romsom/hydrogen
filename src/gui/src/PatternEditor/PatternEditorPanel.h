@@ -113,6 +113,7 @@ class PatternEditorPanel : public QWidget, public EventListener, public H2Core::
 		// Editor top
 		LCDCombo *			__pattern_size_combo;
 		LCDCombo *			__resolution_combo;
+	// TODO tuplets generalization: add __division_base_combo;
 		ToggleButton *		__show_drum_btn;
 		ToggleButton *		__show_piano_btn;
 		QComboBox *			__recpredelete;

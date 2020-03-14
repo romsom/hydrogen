@@ -450,8 +450,8 @@ public:
 	int				getPatternEditorGridResolution();
 	void			setPatternEditorGridResolution( int value );
 
-	bool			isPatternEditorUsingTriplets();
-	void			setPatternEditorUsingTriplets( bool value );
+	int				getPatternEditorGridDivisionBase();
+	void			setPatternEditorGridDivisionBase( int value );
 
 	bool			isFXTabVisible();
 	void			setFXTabVisible( bool value );
@@ -671,7 +671,7 @@ private:
 	int						mixerFontPointSize;
 	float					mixerFalloffSpeed;
 	int						m_nPatternEditorGridResolution;
-	bool					m_bPatternEditorUsingTriplets;
+	int						m_nPatternEditorGridDivisionBase;
 	bool					m_bShowInstrumentPeaks;
 	bool					m_bIsFXTabVisible;
 	bool					m_bShowAutomationArea;
@@ -944,14 +944,12 @@ inline int Preferences::getPatternEditorGridResolution() {
 inline void Preferences::setPatternEditorGridResolution( int value ) {
 	m_nPatternEditorGridResolution = value;
 }
-
-inline bool Preferences::isPatternEditorUsingTriplets() {
-	return m_bPatternEditorUsingTriplets;
+inline int Preferences::getPatternEditorGridDivisionBase() {
+	return m_nPatternEditorGridDivisionBase;
 }
-inline void Preferences::setPatternEditorUsingTriplets( bool value ) {
-	m_bPatternEditorUsingTriplets = value;
+inline void Preferences::setPatternEditorGridDivisionBase( int value ) {
+	m_nPatternEditorGridDivisionBase = value;
 }
-
 inline bool Preferences::isFXTabVisible() {
 	return m_bIsFXTabVisible;
 }

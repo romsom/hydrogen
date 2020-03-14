@@ -81,7 +81,7 @@ PianoRollEditor::~PianoRollEditor()
 }
 
 
-void PianoRollEditor::setResolution(uint res, bool nDivisionBase)
+void PianoRollEditor::setResolution(uint res, int nDivisionBase)
 {
 	this->m_nResolution = res;
 	this->m_nDivisionBase = nDivisionBase;
@@ -309,7 +309,7 @@ void PianoRollEditor::draw_grid( QPainter& p )
 		nNotes = m_pPattern->get_length();
 	}
 	// TODO: Tuplet generalization
-	if (!m_bUseTriplets) {
+	if ( nBase == 4 ) {
 		for ( int i = 0; i < nNotes + 1; i++ ) {
 			uint x = 20 + i * m_nGridWidth;
 
@@ -345,7 +345,7 @@ void PianoRollEditor::draw_grid( QPainter& p )
 			}
 		}
 	}
-	else {	// Triplets
+	else {	// Tuplets
 		uint nCounter = 0;
 		int nSize = 4 * MAX_NOTES / (nBase * m_nResolution);
 
@@ -353,7 +353,7 @@ void PianoRollEditor::draw_grid( QPainter& p )
 			uint x = 20 + i * m_nGridWidth;
 
 			if ( (i % nSize) == 0) {
-				if ((nCounter % 3) == 0) {
+				if ((nCounter % nBase) == 0) {
 					p.setPen( QPen( res_1, 0, Qt::DashLine ) );
 				}
 				else {

@@ -487,7 +487,7 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 	int nRes = pPref->getPatternEditorGridResolution();
 	if (nRes == MAX_NOTES) {
 		nIndex = 11;
-	} else if ( pPref->isPatternEditorUsingTriplets() == false ) {
+	} else if ( pPref->getPatternEditorGridDivisionBase() == 4 ) {
 		switch ( nRes ) {
 			case  4: nIndex = 0; break;
 			case  8: nIndex = 1; break;
@@ -498,7 +498,7 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 				nIndex = 0;
 				ERRORLOG( QString("Wrong grid resolution: %1").arg( pPref->getPatternEditorGridResolution() ) );
 		}
-	} else {
+	} else { // Tuplets
 		switch ( nRes ) {
 			case  8: nIndex = 6; break;
 			case 16: nIndex = 7; break;
@@ -594,13 +594,13 @@ void PatternEditorPanel::on_patternEditorHScroll(int nValue)
 void PatternEditorPanel::gridResolutionChanged( int nSelected )
 {
 	int nResolution;
-	bool bUseTriplets = false;
+	int nDivisionBase = 4;
 
 	if ( nSelected == 11 ) {
 		nResolution = MAX_NOTES;
 	}
 	else if ( nSelected > 4 ) {
-		bUseTriplets = true;
+		nDivisionBase = 3;
 		nResolution = 0x1 << (nSelected - 3);
 	}
 	else {
@@ -608,11 +608,11 @@ void PatternEditorPanel::gridResolutionChanged( int nSelected )
 	}
 
 	// INFOLOG( QString("idx %1 -> %2 resolution").arg( nSelected ).arg( nResolution ) );
-	m_pDrumPatternEditor->setResolution( nResolution, bUseTriplets );
-	m_pPianoRollEditor->setResolution( nResolution, bUseTriplets );
+	m_pDrumPatternEditor->setResolution( nResolution, nDivisionBase );
+	m_pPianoRollEditor->setResolution( nResolution, nDivisionBase );
 
 	Preferences::get_instance()->setPatternEditorGridResolution( nResolution );
-	Preferences::get_instance()->setPatternEditorUsingTriplets( bUseTriplets );
+	Preferences::get_instance()->setPatternEditorGridDivisionBase( nDivisionBase );
 }
 
 
