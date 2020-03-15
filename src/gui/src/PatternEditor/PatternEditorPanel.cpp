@@ -122,21 +122,29 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 	// GRID resolution
 	__resolution_combo = new LCDCombo( pSizeResol , 7);
 	__resolution_combo->setToolTip(tr("Select grid resolution"));
-	__resolution_combo->addItem( "4" );
-	__resolution_combo->addItem( "8" );
-	__resolution_combo->addItem( "16" );
-	__resolution_combo->addItem( "32" );
-	__resolution_combo->addItem( "64" );
-	__resolution_combo->addSeparator();
-	__resolution_combo->addItem( "4T" );
-	__resolution_combo->addItem( "8T" );
-	__resolution_combo->addItem( "16T" );
-	__resolution_combo->addItem( "32T" );
+	// add numerical resolutions
+	// TODO tuplet generalization: research moc vs CPP in contructors
+	// for ( int i = 0; i < N_RESOLUTIONS; i++) {
+	for ( int i = 0; i < 7; i++) {
+		__resolution_combo->addItem( QString( "%1" ).arg( gridResolutionFromIndex( i ) ) );
+	}
+	// add entry for highest resolution
 	__resolution_combo->addSeparator();
 	__resolution_combo->addItem( "off" );
 	__resolution_combo->move( 121, 2 );
 	// is triggered from inside PatternEditorPanel()
 	connect(__resolution_combo, SIGNAL(valueChanged( int )), this, SLOT(gridResolutionChanged( int )));
+
+	// GRID division base
+	__division_base_combo = new LCDCombo( pSizeResol , 10);
+	__division_base_combo->setToolTip(tr("Select grid subdivision"));
+	// TODO tuplet generalization: research moc vs CPP in contructors
+	// for ( int i = 0; i < N_DIVISION_BASES; i++) {
+	for ( int i = 0; i < 6; i++) {
+		__division_base_combo->addItem( QString( "%1" ).arg( gridDivisionBaseFromIndex( i ) ) );
+	}
+	__division_base_combo->move( 208, 2 );
+	connect(__division_base_combo, SIGNAL(valueChanged( int )), this, SLOT(gridDivisionBaseChanged( int )));
 
 
 	PixmapWidget *pRec = new PixmapWidget( nullptr );
@@ -483,33 +491,11 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 
 
 	// restore grid resolution
-	int nIndex;
 	int nRes = pPref->getPatternEditorGridResolution();
-	if (nRes == MAX_NOTES) {
-		nIndex = 11;
-	} else if ( pPref->getPatternEditorGridDivisionBase() == 4 ) {
-		switch ( nRes ) {
-			case  4: nIndex = 0; break;
-			case  8: nIndex = 1; break;
-			case 16: nIndex = 2; break;
-			case 32: nIndex = 3; break;
-			case 64: nIndex = 4; break;
-			default:
-				nIndex = 0;
-				ERRORLOG( QString("Wrong grid resolution: %1").arg( pPref->getPatternEditorGridResolution() ) );
-		}
-	} else { // Tuplets
-		switch ( nRes ) {
-			case  8: nIndex = 6; break;
-			case 16: nIndex = 7; break;
-			case 32: nIndex = 8; break;
-			case 64: nIndex = 9; break;
-			default:
-				nIndex = 6;
-				ERRORLOG( QString("Wrong grid resolution: %1").arg( pPref->getPatternEditorGridResolution() ) );
-		}
-	}
-	__resolution_combo->select( nIndex );
+	__resolution_combo->select( indexFromGridResolution( nRes ) );
+
+	int nBase = pPref->getPatternEditorGridDivisionBase();
+	__division_base_combo->select( indexFromGridDivisionBase( nBase ) );
 
 	//set pre delete
 	__recpredelete->setCurrentIndex(pPref->m_nRecPreDelete);
@@ -590,22 +576,10 @@ void PatternEditorPanel::on_patternEditorHScroll(int nValue)
 
 
 
-
 void PatternEditorPanel::gridResolutionChanged( int nSelected )
 {
-	int nResolution;
-	int nDivisionBase = 4;
-
-	if ( nSelected == 11 ) {
-		nResolution = MAX_NOTES;
-	}
-	else if ( nSelected > 4 ) {
-		nDivisionBase = 3;
-		nResolution = 0x1 << (nSelected - 3);
-	}
-	else {
-		nResolution = 0x1 << (nSelected + 2);
-	}
+	int nResolution = gridResolutionFromIndex( nSelected );
+	int nDivisionBase = Preferences::get_instance()->getPatternEditorGridDivisionBase();
 
 	// INFOLOG( QString("idx %1 -> %2 resolution").arg( nSelected ).arg( nResolution ) );
 	m_pDrumPatternEditor->setResolution( nResolution, nDivisionBase );
@@ -615,6 +589,21 @@ void PatternEditorPanel::gridResolutionChanged( int nSelected )
 	Preferences::get_instance()->setPatternEditorGridDivisionBase( nDivisionBase );
 }
 
+void PatternEditorPanel::gridDivisionBaseChanged( int nSelected )
+{
+	if (nSelected < 0)
+		return;
+	// 3, 4, 5, 7, 9, ...
+	int nDivisionBase = gridDivisionBaseFromIndex( nSelected );
+	int nResolution = Preferences::get_instance()->getPatternEditorGridResolution();
+
+	// INFOLOG( QString("idx %1 -> %2 resolution").arg( nSelected ).arg( nResolution ) );
+	m_pDrumPatternEditor->setResolution( nResolution, nDivisionBase );
+	m_pPianoRollEditor->setResolution( nResolution, nDivisionBase );
+
+	Preferences::get_instance()->setPatternEditorGridResolution( nResolution );
+	Preferences::get_instance()->setPatternEditorGridDivisionBase( nDivisionBase );
+}
 
 
 void PatternEditorPanel::selectedPatternChangedEvent()
@@ -1006,4 +995,43 @@ void PatternEditorPanel::displayorHidePrePostCB()
 void PatternEditorPanel::updatePianorollEditor()
 {
 	m_pDrumPatternEditor->updateEditor(); // force an update
+}
+
+int PatternEditorPanel::gridResolutionFromIndex( int nIndex )
+{
+	// N_RESOLUTIONS resolutions, delimiter, no quantization
+	return nIndex == N_RESOLUTIONS + 1 ? MAX_NOTES : 1 << nIndex;
+}
+
+int PatternEditorPanel::gridDivisionBaseFromIndex( int nIndex )
+{
+	return nIndex < 2 ? 3 + nIndex : 2 * (nIndex - 2) + 5;
+}
+
+int PatternEditorPanel::indexFromGridResolution( int nResolution )
+{
+	// N_RESOLUTIONS resolutions, delimiter, no quantization
+	if ( nResolution == MAX_NOTES )
+		return N_RESOLUTIONS + 1;
+	// check for power of 2
+	for ( int i=0; i<N_RESOLUTIONS; i++ ) {
+		if ( (1 << i ) == nResolution)
+			return i;
+	}
+	ERRORLOG( QString("Wrong grid resolution: %1").arg( nResolution ) );
+	return (1 << 2); // 4ths
+}
+
+int PatternEditorPanel::indexFromGridDivisionBase( int nDivisionBase )
+{
+	if ( nDivisionBase > 2 && nDivisionBase < 5 ) {
+		return nDivisionBase - 3;
+	// check for power of 2
+	} else if (nDivisionBase >= 5 && nDivisionBase % 2 == 1) {
+		int nBase = (nDivisionBase - 3) / 2;
+		if (nBase < N_DIVISION_BASES)
+			return nBase;
+	}
+	ERRORLOG( QString("Wrong grid division_Base: %1").arg( nDivisionBase ) );
+	return 1; // 4ths
 }

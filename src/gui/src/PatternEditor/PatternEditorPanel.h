@@ -30,6 +30,10 @@
 #include "../EventListener.h"
 #include "../Widgets/LCDCombo.h"
 
+// TODO tuplet generalization: move this in config
+const int N_RESOLUTIONS = 7; // 1, 2, 4, 8, 16, 32, 64
+const int N_DIVISION_BASES = 6; // 3, 4, 5, 7, 9, 11
+
 class Button;
 class ToggleButton;
 class Fader;
@@ -82,6 +86,7 @@ class PatternEditorPanel : public QWidget, public EventListener, public H2Core::
 
 	private slots:
 		void gridResolutionChanged( int nSelected );
+		void gridDivisionBaseChanged( int nSelected );
 		void propertiesComboChanged( int nSelected );
 		void patternSizeChanged( int nSelected );
 
@@ -106,6 +111,10 @@ class PatternEditorPanel : public QWidget, public EventListener, public H2Core::
 		void recPostDeleteSelect( int index );
 
 	private:
+		int gridResolutionFromIndex( int nIndex );
+		int gridDivisionBaseFromIndex( int nIndex );
+		int indexFromGridResolution( int nResolution );
+		int indexFromGridDivisionBase( int nDivisionBase );
 		H2Core::Pattern *	m_pPattern;
 		QPixmap				m_backgroundPixmap;
 		QLabel *			pSLlabel;
@@ -114,6 +123,7 @@ class PatternEditorPanel : public QWidget, public EventListener, public H2Core::
 		LCDCombo *			__pattern_size_combo;
 		LCDCombo *			__resolution_combo;
 	// TODO tuplets generalization: add __division_base_combo;
+		LCDCombo *			__division_base_combo;
 		ToggleButton *		__show_drum_btn;
 		ToggleButton *		__show_piano_btn;
 		QComboBox *			__recpredelete;
