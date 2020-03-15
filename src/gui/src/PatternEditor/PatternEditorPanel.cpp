@@ -103,7 +103,7 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 
 //wolke some background images back_size_res
 	PixmapWidget *pSizeResol = new PixmapWidget( nullptr );
-	pSizeResol->setFixedSize( 200, 20 );
+	pSizeResol->setFixedSize( 300, 20 );
 	pSizeResol->setPixmap( "/patternEditor/background_res-new.png" );
 	pSizeResol->move( 0, 3 );
 	editor_top_hbox_2->addWidget( pSizeResol );
@@ -120,7 +120,7 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 
 
 	// GRID resolution
-	__resolution_combo = new LCDCombo( pSizeResol , 7);
+	__resolution_combo = new LCDCombo( pSizeResol , 5);
 	__resolution_combo->setToolTip(tr("Select grid resolution"));
 	// add numerical resolutions
 	// TODO tuplet generalization: research moc vs CPP in contructors
@@ -136,7 +136,7 @@ PatternEditorPanel::PatternEditorPanel( QWidget *pParent )
 	connect(__resolution_combo, SIGNAL(valueChanged( int )), this, SLOT(gridResolutionChanged( int )));
 
 	// GRID division base
-	__division_base_combo = new LCDCombo( pSizeResol , 10);
+	__division_base_combo = new LCDCombo( pSizeResol , 5);
 	__division_base_combo->setToolTip(tr("Select grid subdivision"));
 	// TODO tuplet generalization: research moc vs CPP in contructors
 	// for ( int i = 0; i < N_DIVISION_BASES; i++) {
