@@ -816,6 +816,7 @@ void PatternEditorPanel::patternSizeChanged( int nSelected )
 		return;
 	}
 
+	// set length in 8ths
 	m_pPattern->set_length( nEighth * ( nSelected + 1 ) );
 
 	m_pPatternEditorRuler->updateEditor( true );	// redraw all

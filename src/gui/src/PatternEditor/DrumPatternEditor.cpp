@@ -132,7 +132,7 @@ int DrumPatternEditor::getColumn(QMouseEvent *ev)
 	int x = ev->x();
 	int nColumn;
 	nColumn = x - 20 + (nWidth / 2);
-	nColumn = nColumn / nWidth;
+	nColumn = nColumn / nWidth + (nBase * m_nResolution / 2);
 	nColumn = (nColumn * 4 * MAX_NOTES) / (nBase * m_nResolution);
 	return nColumn;
 }
@@ -465,6 +465,7 @@ void DrumPatternEditor::__draw_pattern(QPainter& painter)
 		return;
 	}
 
+	// get length in 8ths
 	int nNotes = m_pPattern->get_length();
 	int nSelectedInstrument = Hydrogen::get_instance()->getSelectedInstrumentNumber();
 	Song *pSong = Hydrogen::get_instance()->getSong();
@@ -648,6 +649,7 @@ void DrumPatternEditor::__draw_grid( QPainter& p )
 
 	int nNotes = MAX_NOTES;
 	if ( m_pPattern ) {
+		// get length in 8ths
 		nNotes = m_pPattern->get_length();
 	}
 	// TODO: Tuplet generalization
@@ -689,15 +691,17 @@ void DrumPatternEditor::__draw_grid( QPainter& p )
 	}
 	else {	// Tuplets
 		uint nCounter = 0;
-		int nSize = 4 * MAX_NOTES / (nBase * m_nResolution);
+		// int nSize = 4 * MAX_NOTES / (nBase * m_nResolution);
+		float nWidth = (m_nGridWidth * 4 * MAX_NOTES) / (nBase * m_nResolution);
+		int nColumns = nBase * m_nResolution * nNotes / 8; // nNotes is length in 8ths
 
-		for ( int i = 0; i < nNotes + 1; i++ ) {
-			uint x = 20 + i * m_nGridWidth;
-
-			if ( (i % nSize) == 0) {
+		for ( int i = 0; i < nColumns; i++ ) {
+			uint x = (uint)(20 + i * nWidth + 0.5f);
+			if ( (i % nBase) == 0) {
 				if ((nCounter % nBase) == 0) {
 					p.setPen( QPen( res_1, 0 ) );
 				}
+				// subdivisions
 				else {
 					p.setPen( QPen( res_3, 0 ) );
 				}
